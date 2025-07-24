@@ -1,0 +1,69 @@
+
+# ======================
+# Java
+# ======================
+*.class
+*.jar
+*.war
+*.ear
+
+# Compiled class files
+target/
+build/
+out/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+
+# ======================
+# Maven / Gradle
+# ======================
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw.cmd
+.gradle/
+build/
+settings.gradle
+target/
+
+# ======================
+# IntelliJ IDEA
+# ======================
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# IntelliJ working directory
+/out/
+
+# ======================
+# Spring Tool Suite (STS)
+# ======================
+.springBeans
+.sts4-cache/
+
+# Eclipse (used by STS)
+.project
+.classpath
+.settings/
+bin/
+
+# ======================
+# VS Code
+# ======================
+.vscode/
+.history/
+*.code-workspace
+
+# ======================
+# OS / Misc
+# ======================
+.DS_Store
+Thumbs.db
