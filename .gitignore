@@ -1,4 +1,3 @@
-
 # ======================
 # Java
 # ======================
@@ -48,8 +47,19 @@ target/
 # ======================
 .springBeans
 .sts4-cache/
+.metadata/
+.apt_generated/
+.factorypath
+.recommenders/
+.tern-project
+.classpath
+.project
+.settings/
+bin/
 
+# ======================
 # Eclipse (used by STS)
+# ======================
 .project
 .classpath
 .settings/
