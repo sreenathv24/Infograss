@@ -1,4 +1,4 @@
-package sdde;
+package com.basicJava.threads;
 import java.util.*;
 
 public class Array {
