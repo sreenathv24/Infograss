@@ -6,8 +6,8 @@ import java.util.Map;
 
 public class HashMapDemo {
 
-    // Shared HashMap (not thread-safe by default)
-    static final HashMap<Integer, RetailCustomer> hmap = new HashMap<>();
+    // Shared HashMap (Not thread-safe, hence synchronized externally)
+    static final Map<Integer, RetailCustomer> hmap = new HashMap<>();
     static int idCounter = 0;
 
     static {
@@ -24,10 +24,10 @@ public class HashMapDemo {
     }
 
     public static void main(String[] args) {
-        Thread1 thread1 = new Thread1();
-        Thread2 thread2 = new Thread2();
-        thread1.start();
-        thread2.start();
+        Thread t1 = new Thread1();
+        Thread t2 = new Thread2();
+        t1.start();
+        t2.start();
     }
 }
 
@@ -46,11 +46,11 @@ class RetailCustomer {
 
 class Thread1 extends Thread {
     public void run() {
-        for (int index = 0; index < 100; index++) {
+        for (int i = 0; i < 100; i++) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(10); // simulate some delay
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
 
             RetailCustomer rc = new RetailCustomer();
@@ -68,17 +68,16 @@ class Thread2 extends Thread {
         System.out.println("Starting iteration...");
 
         try {
-            Thread.sleep(1000); // Delay to allow Thread1 to add entries
+            Thread.sleep(1000); // Ensure Thread1 has added some entries
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         synchronized (HashMapDemo.hmap) {
-            Iterator<Map.Entry<Integer, RetailCustomer>> iter = HashMapDemo.hmap.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry<Integer, RetailCustomer> entry = iter.next();
-                RetailCustomer rc = entry.getValue();
-                System.out.println("ID: " + entry.getKey() + ", Name: " + rc.getName());
+            Iterator<Map.Entry<Integer, RetailCustomer>> iterator = HashMapDemo.hmap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, RetailCustomer> entry = iterator.next();
+                System.out.println("ID: " + entry.getKey() + ", Name: " + entry.getValue().getName());
             }
         }
     }

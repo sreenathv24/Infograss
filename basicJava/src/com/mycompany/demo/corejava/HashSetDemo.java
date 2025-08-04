@@ -5,32 +5,30 @@ import java.util.Iterator;
 
 public class HashSetDemo {
 
-    static HashSet<RetailCustomer> hset = new HashSet<>();
+    static final HashSet<RetailCustomer1> hset = new HashSet<>();
 
     static {
-
-        RetailCustomer rc1 = new RetailCustomer();
+        RetailCustomer1 rc1 = new RetailCustomer1();
         rc1.setName("Vivek");
 
-        RetailCustomer rc2 = new RetailCustomer();
+        RetailCustomer1 rc2 = new RetailCustomer1();
         rc2.setName("Sara");
 
-        hset.add(rc1);
-        hset.add(rc2);
+        synchronized (hset) {
+            hset.add(rc1);
+            hset.add(rc2);
+        }
     }
 
     public static void main(String[] args) {
-
-        Thread1 thread1 = new Thread1();
-        Thread2 thread2 = new Thread2();
-        thread1.start();
-        thread2.start();
+        Thread t1 = new Thread1();
+        Thread t2 = new Thread2();
+        t1.start();
+        t2.start();
     }
-
 }
 
-class RetailCustomer {
-
+class RetailCustomer1 {
     private String name;
 
     public String getName() {
@@ -46,34 +44,37 @@ class Thread1 extends Thread {
     public void run() {
         for (int index = 0; index < 100; index++) {
             try {
-                this.sleep(10);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
-            RetailCustomer rc = new RetailCustomer();
+
+            RetailCustomer1 rc = new RetailCustomer1();
             rc.setName("John");
-            HashSetDemo.hset.add(rc);
+
+            synchronized (HashSetDemo.hset) {
+                HashSetDemo.hset.add(rc);
+            }
         }
     }
 }
 
 class Thread2 extends Thread {
     public void run() {
-
-        System.out.println("dd");
+        System.out.println("Starting iteration...");
 
         try {
-            this.sleep(1000);
+            Thread.sleep(1000); // Let Thread1 add some elements
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
-        
-        
-        Iterator<RetailCustomer> iter = HashSetDemo.hset.iterator();
-        while (iter.hasNext()) {
-            RetailCustomer rc = iter.next();
-            String name = rc.getName();
-            System.out.println(name);
+
+        synchronized (HashSetDemo.hset) {
+            Iterator<RetailCustomer1> iter = HashSetDemo.hset.iterator();
+            while (iter.hasNext()) {
+                RetailCustomer1 rc = iter.next();
+                System.out.println("Name: " + rc.getName());
+            }
         }
     }
 }
